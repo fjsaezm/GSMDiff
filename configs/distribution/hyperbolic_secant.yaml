@@ -1,0 +1,4 @@
+name: negative_log_sech
+_target_: gsmdiff.distributions.HyperbolicSecant
+scale: 1.0
+

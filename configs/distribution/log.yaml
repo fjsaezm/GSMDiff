@@ -1,0 +1,5 @@
+name: log
+_target_: gsmdiff.distributions.SmoothedPowerLaw
+scale: 0.01
+tail_exponent: 2.0
+

@@ -1,0 +1,5 @@
+name: mala
+_target_: gsmdiff.samplers.MALASampler
+step_size: 0.01
+density_ratio: exact
+quadrature_points: 16

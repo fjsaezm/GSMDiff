@@ -1,0 +1,4 @@
+name: linear
+_target_: gsmdiff.geometric.LinearFieldCoefficient
+start: 1.0
+end: 0.95

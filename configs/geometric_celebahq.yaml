@@ -1,0 +1,78 @@
+defaults:
+  - distribution: hyperbolic_secant
+  - blend: constant
+  - guidance: constant
+  - wandb: default
+  - _self_
+
+model:
+  id: google/ddpm-celebahq-256
+  revision: null
+  # This older checkpoint stores PyTorch weights rather than safetensors.
+  use_safetensors: false
+
+prior:
+  # Makes the first-difference density proper by controlling its DC component.
+  mean_scale: 10.0
+  # Algorithm 2 variational mean-field updates per reverse diffusion step.
+  mean_field_iterations: 1
+  cg:
+    max_iterations: 200
+    tolerance: 1.0e-4
+    numerical_epsilon: 1.0e-8
+    # Reuse the preceding reverse step's solution as the next CG initial guess.
+    warm_start: false
+
+sampling:
+  batch_size: 4
+  num_inference_steps: 100
+  method: reverse_sde
+  # "geometric" reproduces lambda*s_q + (1-lambda)*s_p.  "additive"
+  # preserves the complete learned score and uses s_q + gamma*s_p.
+  score_combination: geometric
+
+# Set to 200 for the 1000-step fixed-lambda experiment. Each checkpoint stores
+# the current noisy state, the guided clean estimate, and clean/contour previews.
+checkpoints:
+  every_steps: null
+
+comparison:
+  generate_diffusion_baseline: true
+
+image:
+  num_preview: 4
+  high_pass_contours:
+    # Draw only the strongest two percent of per-image responses by default.
+    quantile: 0.98
+    threshold: null
+    color: "#ffff00"
+    opacity: 1.0
+
+analysis:
+  near_zero_threshold: 0.1
+  histogram:
+    bins: 160
+    range_quantile: 0.995
+    cdf_max_threshold: 1.0
+
+runtime:
+  seed: 0
+  device: auto
+  dtype: float32
+  deterministic: true
+
+run:
+  name: null
+  output_dir: outputs
+
+wandb:
+  tags: [gsm, geometric-mixture, celebahq, diffusers]
+
+hydra:
+  run:
+    dir: ${run.output_dir}/hydra/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: ${run.output_dir}/hydra_sweeps/${now:%Y-%m-%d_%H-%M-%S}
+    subdir: ${hydra.job.num}
+  job:
+    chdir: false

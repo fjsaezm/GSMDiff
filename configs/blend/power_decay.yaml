@@ -1,0 +1,3 @@
+name: power_decay
+_target_: gsmdiff.geometric.PowerDecayLambda
+power: 5.0

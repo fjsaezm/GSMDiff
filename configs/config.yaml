@@ -1,0 +1,56 @@
+defaults:
+  - distribution: hyperbolic_secant
+  - prior: filter_product
+  - sampler: mala
+  - wandb: default
+  - _self_
+
+image:
+  shape: [1, 32, 32]
+  num_preview: 4
+  preview_range: 4.0
+  high_pass_contours:
+    enabled: true
+    quantile: 0.9
+    threshold: null
+    color: "#ffff00"
+    opacity: 1.0
+
+initialization:
+  std: 1.0
+
+comparison:
+  baseline:
+    std: ${initialization.std}
+    match_gsm_std: true
+    seed_offset: 1
+  histogram:
+    bins: 100
+    standardize: true
+    log_y: true
+    range_quantile: 0.995
+    near_zero_threshold: 0.1
+
+sampling:
+  num_chains: 4
+  draws_per_chain: 1
+  burn_in: 1000
+  thinning: 10
+
+runtime:
+  seed: 0
+  device: auto
+  dtype: float32
+
+run:
+  name: null
+  output_dir: outputs
+
+hydra:
+  run:
+    dir: ${run.output_dir}/hydra/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: ${run.output_dir}/hydra_sweeps/${now:%Y-%m-%d_%H-%M-%S}
+    subdir: ${hydra.job.num}
+  job:
+    chdir: false

@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gsmdiff"
+version = "0.1.0"
+description = "Gaussian scale-mixture image samplers"
+requires-python = ">=3.10"
+dependencies = [
+  "hydra-core>=1.3",
+  "matplotlib>=3.7",
+  "numpy>=1.24",
+  "omegaconf>=2.3",
+  "torch>=2.1",
+  "wandb>=0.16",
+]
+
+[project.scripts]
+gsmdiff-sample = "gsmdiff.scripts.sample:main"
+gsmdiff-sample-celebahq = "gsmdiff.scripts.sample_geometric_celebahq:main"
+gsmdiff-sample-flow-celeba = "gsmdiff.scripts.sample_geometric_flow_celeba:main"
+gsmdiff-build-flow-report = "gsmdiff.scripts.build_flow_cg_report:main"
+gsmdiff-compare-celebahq = "gsmdiff.scripts.compare_celebahq_geometric_runs:main"
+gsmdiff-plot-lambdas = "gsmdiff.scripts.plot_lambda_schedules:main"
+gsmdiff-evaluate-fid-kid = "gsmdiff.scripts.evaluate_fid_kid:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+diffusion = [
+  "accelerate>=0.30",
+  "diffusers>=0.30",
+  "safetensors>=0.4",
+]
+flow = [
+  "gdown>=5.2",
+]
+metrics = [
+  "pillow>=9",
+  "torch-fidelity>=0.3",
+  "torchmetrics>=1.3",
+]
+
+[tool.setuptools.packages.find]
+include = ["gsmdiff*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

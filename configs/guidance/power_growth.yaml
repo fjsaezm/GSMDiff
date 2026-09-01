@@ -1,0 +1,4 @@
+name: power_growth
+_target_: gsmdiff.geometric.PowerGrowthGamma
+maximum: 0.01
+power: 5.0

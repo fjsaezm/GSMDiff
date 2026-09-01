@@ -1,0 +1,4 @@
+name: filtered
+_target_: gsmdiff.distributions.FirstDifferenceFilterProduct
+mean_scale: 10.0
+

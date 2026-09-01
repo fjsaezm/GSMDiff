@@ -1,0 +1,77 @@
+defaults:
+  - distribution: hyperbolic_secant
+  - flow_weight: constant
+  - prior_weight: constant
+  - wandb: default
+  - _self_
+
+model:
+  # Public 128x128 CelebA OT-flow checkpoint released by PnP-Flow.
+  checkpoint: models/pnp_flow/celeba_ot_128.pt
+  download: true
+  google_drive_id: 1ZZ6S-PGRx-tOPkr4Gt3A6RN-PChabnD6
+  sha256: a5b8e7f0c96fb7b751f21a085992b6babaf4f1c4083b674495ea6e4cd9cc0a4c
+  input_channels: 3
+  input_height: 128
+  channels: 32
+  channel_multipliers: [1, 2, 4, 8]
+  residual_blocks: 6
+  attention_resolutions: [16, 8]
+
+prior:
+  mean_scale: 10.0
+  # Algorithm 5 fixed-point refinements per forward ODE step.
+  mean_field_iterations: 1
+  cg:
+    max_iterations: 200
+    tolerance: 1.0e-4
+    numerical_epsilon: 1.0e-8
+    warm_start: false
+
+sampling:
+  batch_size: 4
+  num_inference_steps: 100
+  method: euler
+
+checkpoints:
+  every_steps: null
+
+comparison:
+  generate_flow_baseline: true
+
+image:
+  num_preview: 4
+  high_pass_contours:
+    quantile: 0.98
+    threshold: null
+    color: "#ffff00"
+    opacity: 1.0
+
+analysis:
+  near_zero_threshold: 0.1
+  histogram:
+    bins: 160
+    range_quantile: 0.995
+    cdf_max_threshold: 1.0
+
+runtime:
+  seed: 0
+  device: auto
+  dtype: float32
+  deterministic: true
+
+run:
+  name: null
+  output_dir: outputs
+
+wandb:
+  tags: [gsm, geometric-mixture, flow-matching, celeba, pnp-flow]
+
+hydra:
+  run:
+    dir: ${run.output_dir}/hydra/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: ${run.output_dir}/hydra_sweeps/${now:%Y-%m-%d_%H-%M-%S}
+    subdir: ${hydra.job.num}
+  job:
+    chdir: false

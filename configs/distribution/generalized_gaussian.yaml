@@ -1,0 +1,6 @@
+name: l0.8
+_target_: gsmdiff.distributions.GeneralizedGaussian
+shape: 0.8
+scale: 1.0
+smoothing: 0.001
+

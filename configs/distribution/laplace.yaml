@@ -1,0 +1,5 @@
+name: l1
+_target_: gsmdiff.distributions.Laplace
+scale: 1.0
+smoothing: 0.001
+

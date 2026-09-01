@@ -1,0 +1,4 @@
+name: l2
+_target_: gsmdiff.distributions.Gaussian
+scale: 1.0
+
